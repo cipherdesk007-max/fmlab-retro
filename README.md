@@ -9,13 +9,34 @@ ARM64 personalizzato per giocare alle console vecchie sull'iPhone, con emulatori
 > **Nessun gioco incluso.** FMLAB Retro non fornisce e non scarica giochi: li mette l'utente, solo file che
 > possiede o liberi (homebrew).
 
+## Il disco emulatore (Game Emulator di FMLAB Linux)
+
+Dalla 0.9.0 di FMLAB Linux i giochi non passano più da Linux: l'app ha il **Game Emulator**, con gli emulatori
+**nativi per iPhone** (arm64, senza JIT) che questo progetto compila. Sono i core libretro, gli stessi di RetroArch:
+
+| Console | Core | Sorgente |
+|---|---|---|
+| NES | FCEUmm | libretro/libretro-fceumm |
+| Game Boy / Color | Gambatte | libretro/gambatte-libretro |
+| Game Boy Advance | mGBA | libretro/mgba |
+| Super Nintendo | bsnes | libretro/bsnes |
+| PlayStation | PCSX ReARMed (interprete) | libretro/pcsx_rearmed |
+| Nintendo DS | DeSmuME (interprete) | libretro/desmume |
+
+- Commit fissi in [`core/core.tsv`](core/core.tsv), compilati da GitHub ([core-ios](.github/workflows/core-ios.yml)), uno
+  `.framework` per core. La pubblicazione `core-<n>` ha `FMLAB-Core.zip`, la sua impronta SHA-256 e `core.json`
+  (sorgente, dimensione e impronta di ogni core).
+- FMLAB Linux fissa tag e impronta in `app/FMLAB/Emulatore/DISCO` e controlla l'impronta a ogni compilazione.
+- Nessun gioco incluso: li mette l'utente (app File › FMLAB Linux › Giochi).
+
+## FMLAB Retro su Debian (facoltativo)
+
+Per chi vuole RetroArch dentro Linux c'è ancora il pacchetto `fmlab-retro` nell'archivio apt firmato. È più lento del
+Game Emulator, perché passa dall'interprete.
+
 ## Installare
 
-**Dall'app** (FMLAB Linux 0.8.8 o dopo): Distribuzioni → Configura Linux… → **FMLAB Retro**. Si installa Debian 13
-ufficiale verificato, poi account e desktop, poi *Installa FMLAB Retro*. La trovi in Distribuzioni con l'icona del
-controller, accanto a Debian.
-
-**A mano**, in un Debian 13 che hai già:
+In un Debian 13 che hai già:
 
 ```sh
 B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
@@ -39,7 +60,7 @@ dentro un interprete (o col JIT, con StikDebug) e un emulatore lì dentro fa dop
 |---|---|---|
 | 1 | **Misura** degli fps su NES, Game Boy, GBA (e SNES/Sega con i tuoi file) | ✅ fatta sul telefono, si continua con JIT e GPU |
 | 2 | **Pacchetto** `fmlab-retro` (RetroArch, core, impostazioni FMLAB, `rk-giochi`, misura) in un **archivio apt firmato GPG** (ramo `apt`, costruito e provato su Debian 13 ARM64 da GitHub) | ✅ |
-| 3 | **Distribuzione nell'app**: FMLAB Linux → Configura Linux… → FMLAB Retro (Debian 13 verificato + archivio FMLAB) | ✅ FMLAB Linux 0.8.8 |
+| 3 | **Game Emulator nativo** nell'app (disco emulatore `core-<n>`), al posto della Debian per i giochi | ✅ FMLAB Linux 0.9.0 |
 
 Non c'è un'immagine da riscaricare: tutto si aggiorna con `apt update && apt upgrade` (Debian ufficiale + archivio
 FMLAB), e le modifiche dell'utente restano.

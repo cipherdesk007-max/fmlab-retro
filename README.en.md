@@ -9,12 +9,21 @@ ARM64 customised for playing classic consoles on the iPhone, with tuned emulator
 > **No games included.** FMLAB Retro neither ships nor downloads games: users add their own, only files they own or
 > free homebrew.
 
+## The emulator disc (FMLAB Linux Game Emulator)
+
+Since FMLAB Linux 0.9.0 games no longer go through Linux: the app has a **Game Emulator** with **native iPhone
+emulators** (arm64, no JIT) built by this project from libretro cores: FCEUmm (NES), Gambatte (Game Boy/Color), mGBA
+(GBA), bsnes (SNES), PCSX ReARMed (PlayStation, interpreter), DeSmuME (DS, interpreter). Fixed commits in
+[`core/core.tsv`](core/core.tsv), built by GitHub ([core-ios](.github/workflows/core-ios.yml)); each `core-<n>` release
+has `FMLAB-Core.zip`, its SHA-256 and `core.json`. The app pins tag and checksum. No games included.
+
+## FMLAB Retro on Debian (optional)
+
+RetroArch inside Linux is still available as the `fmlab-retro` package (slower: it runs through the interpreter).
+
 ## Install
 
-**From the app** (FMLAB Linux 0.8.8 or later): Distributions → Set Up Linux… → **FMLAB Retro**. It installs verified
-official Debian 13, then account and desktop, then *Install FMLAB Retro*.
-
-**By hand**, on an existing Debian 13:
+On an existing Debian 13:
 
 ```sh
 B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
