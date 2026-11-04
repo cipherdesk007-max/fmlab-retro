@@ -24,6 +24,8 @@ jobs:
           for n, c in d["core"].items():
               assert c["estensioni"] and all(re.fullmatch(r"[a-z0-9]{1,5}", e) for e in c["estensioni"]), n
               assert all(isinstance(k, str) and isinstance(v, str) and k.replace("_", "").isalnum() for k, v in c["opzioni"].items()), n
+              for campo in ("nome", "nota"):
+                  assert campo not in c or (isinstance(c[campo], dict) and all(isinstance(v, str) for v in c[campo].values())), (n, campo)
           for b in d["bios"]:
               assert b["core"] in noti and re.fullmatch(r"[0-9a-f]{32}", b["md5"]) and "/" not in b["file"], b
           print("ok:", d["versione"], len(d["core"]), "core,", len(d["bios"]), "BIOS")
