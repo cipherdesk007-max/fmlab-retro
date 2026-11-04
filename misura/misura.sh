@@ -146,4 +146,4 @@ printf '%s\n%s\n' "$rep" "$tab" > "$dest/$nomef"
 echo
 echo "Salvato: $dest/$nomef"
 case "$dest" in */LinuxRunnerShared|*/Shared) echo "Nell'app File: In questo iPhone > FMLAB Linux > Shared (mandalo per la tabella del progetto)";; esac
-echo "\"1x\" = finestra piccola, quasi solo il processore; \"intero\" = a schermo intero. Con JIT (StikDebug) di solito va più veloce."
+echo "1x/2x/3x = finestra ingrandita 1, 2, 3 volte; intero = schermo intero; -filo = video in un filo a parte (emulatore e disegno in parallelo). Con JIT e GPU Metal di solito va più veloce."
