@@ -1,0 +1,13 @@
+Package: fmlab-retro
+Version: @VERSIONE@
+Architecture: all
+Maintainer: Francesco21 (FMLAB) <https://github.com/cipherdesk007-max>
+Homepage: https://github.com/cipherdesk007-max/fmlab-retro
+Section: games
+Priority: optional
+Depends: retroarch, libretro-nestopia, libretro-gambatte, libretro-mgba, libretro-core-info, python3, curl, unzip, ca-certificates
+Recommends: libretro-desmume, libretro-bsnes-mercury-performance
+Description: FMLAB Retro - console classiche su FMLAB Linux
+ RetroArch con impostazioni FMLAB regolate per l'iPhone, rk-giochi per
+ mettere i propri giochi (nessun gioco incluso) e la misura degli fps.
+ Si aggiorna con apt insieme a Debian.

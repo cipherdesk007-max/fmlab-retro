@@ -1,0 +1,86 @@
+name: archivio
+# Costruisce i pacchetti FMLAB Retro, li prova su Debian 13 ARM64 vero e, se c'è la chiave
+# (segreto FMLAB_APT_CHIAVE), firma e pubblica l'archivio apt nel ramo "apt".
+on:
+  push:
+    branches: [main]
+    paths: ["pacchetti/**", "archivio/**", "strumenti/**", "misura/**", ".github/workflows/archivio.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: archivio, cancel-in-progress: false }
+jobs:
+  archivio:
+    runs-on: ubuntu-24.04-arm
+    container: debian:trixie
+    env:
+      CHIAVE: ${{ secrets.FMLAB_APT_CHIAVE }}
+    steps:
+      - name: Programmi
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends git gnupg python3 ca-certificates xvfb xauth >/dev/null
+      - uses: actions/checkout@v4
+      - name: Chiave di firma
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GNUPGHOME=$RUNNER_TEMP/gnupg; mkdir -m700 -p $GNUPGHOME; echo "GNUPGHOME=$GNUPGHOME" >> $GITHUB_ENV
+          if [ -n "$CHIAVE" ]; then
+            printf '%s\n' "$CHIAVE" | gpg --batch --import 2>&1 | tail -1
+            fpr=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')
+            [ "$fpr" = "$(cat archivio/IMPRONTA)" ] || { echo "::error::la chiave del segreto non è quella di archivio/IMPRONTA"; exit 1; }
+            echo "FIRMA=--firma $fpr" >> $GITHUB_ENV
+          else
+            echo "::warning::segreto FMLAB_APT_CHIAVE assente: provo l'archivio ma non lo pubblico"
+          fi
+      - name: Costruisci
+        run: python3 strumenti/costruisci-archivio.py "$RUNNER_TEMP/apt" $FIRMA
+      - name: Prova installazione da questo archivio
+        shell: bash
+        run: |
+          set -euo pipefail
+          A="$RUNNER_TEMP/apt"
+          cp archivio/fmlab-retro.gpg /usr/share/keyrings/
+          if [ -n "${FIRMA:-}" ]; then fir="Signed-By: /usr/share/keyrings/fmlab-retro.gpg"; else fir="Trusted: yes"; fi
+          printf 'Types: deb\nURIs: file://%s/\nSuites: trixie\nComponents: main\n%s\n' "$A" "$fir" > /etc/apt/sources.list.d/fmlab-retro.sources
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fmlab-retro >/dev/null
+          for c in fmlab-retro rk-giochi fmlab-retro-misura retroarch; do command -v $c; done
+          fmlab-retro --versione
+          ls /usr/lib/aarch64-linux-gnu/libretro/ /usr/share/libretro/info | head -20
+          # la base delle impostazioni si copia la prima volta e poi non si tocca più
+          export HOME=$RUNNER_TEMP/utente; mkdir -p $HOME
+          xvfb-run -a fmlab-retro --version >/dev/null 2>&1 || true
+          cfg=$HOME/.config/retroarch/retroarch.cfg
+          grep -q 'video_scale = "2.000000"' $cfg && grep -q "$HOME/Giochi" $cfg
+          echo 'video_scale = "3.000000"' >> $cfg
+          xvfb-run -a fmlab-retro --version >/dev/null 2>&1 || true
+          grep -q 'video_scale = "3.000000"' $cfg
+          echo "ok: installazione, comandi, impostazioni che restano"
+      - name: Pubblica nel ramo apt
+        if: env.FIRMA != '' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/apt"
+          git init -q -b apt && git config user.name "FMLAB Retro (CI)" && git config user.email "actions@users.noreply.github.com"
+          git add -A && git commit -q -m "archivio apt da ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" apt
+          echo "pubblicato"
+  in-linea:
+    needs: archivio
+    runs-on: ubuntu-24.04-arm
+    container: debian:trixie
+    steps:
+      - name: Come un utente, dall'archivio pubblicato
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends curl ca-certificates gnupg >/dev/null
+          B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
+          sleep 60   # la cache di raw.githubusercontent.com
+          curl -fsSL $B/fmlab-retro.gpg -o /usr/share/keyrings/fmlab-retro.gpg
+          curl -fsSL $B/fmlab-retro.sources -o /etc/apt/sources.list.d/fmlab-retro.sources
+          gpg --show-keys --with-colons /usr/share/keyrings/fmlab-retro.gpg | grep -q "fpr:::::::::$(curl -fsSL $B/IMPRONTA):"
+          apt-get update 2>&1 | grep -i fmlab
+          apt-cache policy fmlab-retro
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fmlab-retro >/dev/null && fmlab-retro --versione

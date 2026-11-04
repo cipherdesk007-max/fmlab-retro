@@ -8,7 +8,7 @@
 #   rk-giochi bios FILE...       mette i BIOS (servono a qualche console; anche questi li metti tu)
 # I file vanno in ~/Giochi/<console>/ e compaiono negli elenchi di RetroArch.
 set -u
-VERSIONE="0.1.0"
+VERSIONE="0.2.0"
 GIOCHI="${RK_GIOCHI:-$HOME/Giochi}"
 PLAYLIST="${RK_PLAYLIST:-$HOME/.config/retroarch/playlists}"
 BIOS="${RK_BIOS:-$HOME/.config/retroarch/system}"
@@ -28,6 +28,7 @@ console_di() {
     *.sms) echo "Master System|genesis_plus_gx";;
     *.gg) echo "Game Gear|genesis_plus_gx";;
     *.pce) echo "PC Engine|mednafen_pce_fast";;
+    *.nds) echo "Nintendo DS|desmume";;
     *) echo "";;
   esac
 }
@@ -45,10 +46,13 @@ import json, os, sys, glob
 giochi, pl = sys.argv[1], sys.argv[2]
 core = {"NES": "nestopia", "Game Boy": "gambatte", "Game Boy Color": "gambatte", "Game Boy Advance": "mgba",
         "Super Nintendo": "snes9x", "Mega Drive": "genesis_plus_gx", "Master System": "genesis_plus_gx",
-        "Game Gear": "genesis_plus_gx", "PC Engine": "mednafen_pce_fast"}
+        "Game Gear": "genesis_plus_gx", "PC Engine": "mednafen_pce_fast", "Nintendo DS": "desmume"}
+# se il core preferito non c'è, il primo disponibile tra quelli che fanno la stessa console (Debian 13 ha bsnes, non snes9x)
+riserva = {"snes9x": ["snes9x2010", "bsnes_mercury_performance", "bsnes_mercury_balanced"]}
 def so(n):
-    for f in glob.glob(f"/usr/lib/*/libretro/{n}_libretro.so") + [f"/usr/lib/libretro/{n}_libretro.so"]:
-        if os.path.exists(f): return f
+    for nome in [n] + riserva.get(n, []):
+        for f in glob.glob(f"/usr/lib/*/libretro/{nome}_libretro.so") + [f"/usr/lib/libretro/{nome}_libretro.so"]:
+            if os.path.exists(f): return f
     return "DETECT"
 for c in sorted(os.listdir(giochi)) if os.path.isdir(giochi) else []:
     d = os.path.join(giochi, c)
@@ -65,7 +69,7 @@ metti() {  # $1 file -> nella cartella della sua console
   local f=$1 cc nome
   [ -f "$f" ] || { no "$f: non esiste"; return 1; }
   case "${f,,}" in *.zip) cc=$(console_zip "$f");; *) cc=$(console_di "$f");; esac
-  [ -n "$cc" ] || { no "$(basename "$f"): tipo non riconosciuto (nes, gb, gbc, gba, sfc, smc, md, sms, gg, pce, zip)"; return 1; }
+  [ -n "$cc" ] || { no "$(basename "$f"): tipo non riconosciuto (nes, gb, gbc, gba, sfc, smc, md, sms, gg, pce, nds, zip)"; return 1; }
   nome=${cc%%|*}
   mkdir -p "$GIOCHI/$nome"
   if [ -e "$GIOCHI/$nome/$(basename "$f")" ]; then no "$(basename "$f"): c'è già in $nome"; return 1; fi
