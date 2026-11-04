@@ -20,7 +20,9 @@ COPIE = {
     "usr/bin/rk-giochi": "strumenti/rk-giochi",
     "usr/bin/fmlab-retro-misura": "misura/misura.sh",
     "usr/share/keyrings/fmlab-retro.gpg": "archivio/fmlab-retro.gpg",
-    "etc/apt/sources.list.d/fmlab-retro.sources": "archivio/fmlab-retro.sources",
+    # la sorgente /etc/apt/sources.list.d/fmlab-retro.sources la crea chi aggiunge l'archivio
+    # (l'app o il comando del README): se fosse del pacchetto, dpkg chiederebbe cosa fare
+    "usr/share/fmlab-retro/fmlab-retro.sources": "archivio/fmlab-retro.sources",
 }
 
 

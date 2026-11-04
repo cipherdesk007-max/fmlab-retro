@@ -43,7 +43,7 @@ jobs:
           if [ -n "${FIRMA:-}" ]; then fir="Signed-By: /usr/share/keyrings/fmlab-retro.gpg"; else fir="Trusted: yes"; fi
           printf 'Types: deb\nURIs: file://%s/\nSuites: trixie\nComponents: main\n%s\n' "$A" "$fir" > /etc/apt/sources.list.d/fmlab-retro.sources
           apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fmlab-retro >/dev/null
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fmlab-retro >/dev/null || { DEBIAN_FRONTEND=noninteractive apt-get install -y fmlab-retro; exit 1; }
           for c in fmlab-retro rk-giochi fmlab-retro-misura retroarch; do command -v $c; done
           fmlab-retro --versione
           ls /usr/lib/aarch64-linux-gnu/libretro/ /usr/share/libretro/info | head -20
