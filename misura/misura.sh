@@ -81,10 +81,13 @@ giro() {  # $1 core $2 file $3 driver video $4 fotogrammi -> secondi
   cfg=$(mktemp)
   printf 'video_driver = "%s"\nvideo_vsync = "false"\naudio_driver = "null"\naudio_sync = "false"\nvideo_fullscreen = "false"\nconfig_save_on_exit = "false"\npause_nonactive = "false"\nnotification_show_autoconfig = "false"\n' "$3" > "$cfg"
   t0=$(date +%s.%N)
-  timeout 600 retroarch --config "$cfg" -L "$1" "$2" --max-frames="$4" >/dev/null 2>&1
+  timeout 600 retroarch --config "$cfg" -L "$1" "$2" --max-frames="$4" >"$CACHE/retroarch.log" 2>&1
   local e=$?
   t1=$(date +%s.%N); rm -f "$cfg"
-  [ $e -eq 0 ] || { echo "ERR"; return; }
+  if [ $e -ne 0 ]; then
+    { echo "--- retroarch $3 uscita $e:"; grep -iE 'error|errore|fail|driver' "$CACHE/retroarch.log" | tail -8; } >>"$CACHE/errori.log"
+    echo "ERR"; return
+  fi
   python3 -c "print(f'{$t1-$t0:.3f}')"
 }
 fps() {  # $1 core $2 file $3 driver -> fps (giro lungo - giro corto)
