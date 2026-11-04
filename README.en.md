@@ -33,7 +33,8 @@ curl -fsSL https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/main/
 
 - Installs RetroArch and the lightest cores from Debian (Nestopia, Gambatte, mGBA; SNES and Sega if available).
 - Downloads the free **240p Test Suite** test ROMs (Damian Yerrick, GPL) from their GitHub page.
-- For each console it measures **compute** (what the CPU can do, without drawing) and **desktop** (with real video).
+- For each console it measures **1x** (small window: mostly the CPU) and **full** (full screen, with real
+  drawing).
   Method: two runs of 120 and 720 frames, fps = difference over time, so start-up doesn't count. 60 fps = full speed.
 - With your own file: `bash /tmp/misura.sh my-game.sfc`.
 - The result is also saved in **Shared** (Files app → FMLAB Linux → Shared).

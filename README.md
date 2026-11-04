@@ -33,8 +33,8 @@ curl -fsSL https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/main/
 
 - Installa RetroArch e i core più leggeri da Debian (Nestopia, Gambatte, mGBA; SNES e Sega se disponibili).
 - Scarica i giochi di prova liberi **240p Test Suite** (Damian Yerrick, GPL) dalla loro pagina GitHub.
-- Per ogni console misura due cose: **calcolo** (quanto regge il processore, senza disegnare) e **desktop** (col
-  video vero). Metodo: due giri da 120 e 720 fotogrammi, fps = differenza diviso tempo, così l'avvio non conta.
+- Per ogni console misura due cose: **1x** (finestra piccola: quasi solo il processore) e **intero** (a schermo
+  intero, col disegno vero). Metodo: due giri da 120 e 720 fotogrammi, fps = differenza diviso tempo, così l'avvio non conta.
   60 fps = velocità vera.
 - Con un tuo file: `bash /tmp/misura.sh mio-gioco.sfc`.
 - Il risultato va anche in un file in **Shared** (app File → FMLAB Linux → Shared): mandalo per la tabella qui sotto.
