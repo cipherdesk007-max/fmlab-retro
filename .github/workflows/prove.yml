@@ -1,0 +1,33 @@
+name: prove
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  strumenti:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sintassi
+        run: bash -n misura/misura.sh && bash -n strumenti/rk-giochi && bash -n tests/test_rk_giochi.sh
+      - name: rk-giochi
+        run: bash tests/test_rk_giochi.sh
+
+  # Riferimento: stessa misura su un vero server ARM64 con Debian 13 (senza interprete) = velocità "nativa".
+  # Sul telefono si rifà la stessa misura: il rapporto dice quanto costa l'interprete (o il JIT).
+  misura-arm64:
+    runs-on: ubuntu-24.04-arm
+    container: debian:trixie
+    steps:
+      - uses: actions/checkout@v4
+      - name: Programmi
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends xvfb xauth ca-certificates curl python3 unzip >/dev/null
+      - name: Misura (calcolo e video, Xvfb software)
+        run: xvfb-run -a -s "-screen 0 1308x644x24" bash misura/misura.sh 2>&1 | tee misura-arm64.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: misura-arm64
+          path: misura-arm64.txt
