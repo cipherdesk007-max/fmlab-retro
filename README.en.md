@@ -48,6 +48,14 @@ We first measured RetroArch **inside Debian** in FMLAB Linux ([`misura/misura.sh
 without JIT, fps at 1x · 2x · 3x · full screen: NES 68 · 30 · 19 · 10, Game Boy 154 · 67 · 34 · 10, GBA 131 · 45 · 22 · 9
 (60 = full speed). The interpreter costs 15–25×, so the Game Emulator runs the same cores natively.
 
+## Automatic tests
+
+On every change to `core/`, `dati/` or `prove/`, GitHub ([core-prova](.github/workflows/core-prova.yml)) builds the same
+cores at the same commits for Linux and tests them with [`prove/banco.c`](prove/banco.c), which answers the cores like
+the app's Game Emulator: every option in `dati/emulatore.json` must exist in the core with an accepted value, and with
+free test games (240p Test Suite for NES, Game Boy and GBA, an FMLAB-made SNES ROM) the game must start, change screens
+with simulated buttons, save and reload state.
+
 ## How it's checked
 
 Every `core-<n>` has a published SHA-256 and the app refuses to build on a mismatch. Each core can be rebuilt from the

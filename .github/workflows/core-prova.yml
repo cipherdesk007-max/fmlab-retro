@@ -1,0 +1,34 @@
+name: core-prova
+# I core del disco emulatore (stessi commit di core/core.tsv) compilati per Linux e provati col banco come li usa
+# il Game Emulator: le opzioni di dati/emulatore.json devono esistere nel core, e con giochi di prova liberi
+# (240p Test Suite, una ROM SNES scritta da FMLAB) immagine, salva e carica stato devono funzionare.
+on:
+  push:
+    branches: [main]
+    paths: ["core/**", "dati/**", "prove/**", ".github/workflows/core-prova.yml"]
+  workflow_dispatch:
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { core: fceumm, gioco: 240pee.nes }
+          - { core: gambatte, gioco: gb240p.gb }
+          - { core: mgba, gioco: 240pee_mb.gba }
+          - { core: bsnes, gioco: banco.sfc }
+          - { core: pcsx_rearmed, gioco: "" }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Strumenti
+        run: sudo apt-get install -y -qq ninja-build >/dev/null
+      - name: Giochi di prova liberi
+        run: |
+          mkdir -p rom
+          for f in 240pee.nes gb240p.gb 240pee_mb.gba; do curl -fsSL --retry 3 -o rom/$f "https://github.com/pinobatch/240p-test-mini/releases/latest/download/$f"; done
+          python3 prove/rom-snes.py rom/banco.sfc
+      - name: Compila ${{ matrix.core }}
+        run: prove/costruisci-core-linux.sh ${{ matrix.core }} core-linux
+      - name: Prova ${{ matrix.core }}
+        run: python3 prove/prova.py core-linux/${{ matrix.core }}_libretro.so ${{ matrix.core }} ${{ matrix.gioco && format('rom/{0}', matrix.gioco) || '' }}

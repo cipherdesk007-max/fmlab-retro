@@ -68,6 +68,19 @@ sull'iPhone 15 Pro Max senza JIT, finestra 1x · 2x · 3x · schermo intero (60 
 Dentro Linux l'interprete rallenta tutto da 15 a 25 volte, e disegnare a schermo intero lo affossa. Nativi, gli stessi
 core vanno molte volte oltre i 60 fps: per questo il Game Emulator li porta direttamente nell'app.
 
+## Prove automatiche
+
+A ogni modifica di `core/`, `dati/` o `prove/`, GitHub ([core-prova](.github/workflows/core-prova.yml)) compila per Linux
+gli stessi core agli stessi commit e li prova con [`prove/banco.c`](prove/banco.c), che risponde ai core come il Game
+Emulator dell'app:
+
+- ogni opzione di `dati/emulatore.json` deve esistere nel core, con un valore che il core accetta;
+- con i giochi di prova liberi (240p Test Suite per NES, Game Boy e GBA, una ROM SNES scritta da FMLAB) il gioco deve
+  partire, cambiare schermata coi tasti simulati, salvare e ricaricare lo stato.
+
+Il DS si prova solo compilato per iPhone (core-ios); la PlayStation solo nelle opzioni, perché non c'è un disco di
+prova libero.
+
 ## Come si verifica
 
 - Ogni `core-<n>` ha l'impronta SHA-256 pubblicata. L'app rifiuta di compilarsi se il file scaricato non corrisponde.
