@@ -23,6 +23,16 @@ FCEUmm (NES), Gambatte (Game Boy/Color), mGBA (GBA), bsnes (SNES), PCSX ReARMed 
 They are built in because iOS only runs code signed with the app: a native emulator downloaded later would not start
 without JIT.
 
+## Engine data (updated without a new app)
+
+[`dati/emulatore.json`](dati/emulatore.json) holds everything that is **not code**: extensions each emulator opens,
+options (all JIT-free), BIOS files checked by MD5, notices. The Game Emulator downloads it from here (at most every 6
+hours, when opened), validates it and uses it; offline it uses the last copy or the one built into the app. Editing
+this file updates every phone **without a new app version**. GitHub's checks reject a malformed file.
+
+Emulator code can't be updated this way: iOS only runs code signed with the app, so a new core ships with an FMLAB
+Linux update (`core-<n>` disc).
+
 ## The study: why native
 
 We first measured RetroArch **inside Debian** in FMLAB Linux ([`misura/misura.sh`](misura/misura.sh)). iPhone 15 Pro Max

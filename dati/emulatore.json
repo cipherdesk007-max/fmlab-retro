@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "versione": "2026.11.04-1",
+  "nota": "Dati del Game Emulator di FMLAB Linux: l'app li scarica da qui (niente codice, solo impostazioni). Gli emulatori veri sono nel disco core-<n>.",
+  "core": {
+    "fceumm": {
+      "estensioni": ["nes", "fds", "unf", "unif"],
+      "opzioni": { "fceumm_aspect": "8:7 PAR" }
+    },
+    "gambatte": {
+      "estensioni": ["gb", "gbc", "dmg"],
+      "opzioni": {}
+    },
+    "bsnes": {
+      "estensioni": ["sfc", "smc", "bs"],
+      "opzioni": {}
+    },
+    "pcsx_rearmed": {
+      "estensioni": ["cue", "pbp", "chd", "m3u", "iso", "img", "bin"],
+      "opzioni": { "pcsx_rearmed_drc": "disabled", "pcsx_rearmed_frameskip": "0" }
+    },
+    "mgba": {
+      "estensioni": ["gba"],
+      "opzioni": { "mgba_skip_bios": "ON" }
+    },
+    "desmume": {
+      "estensioni": ["nds"],
+      "opzioni": { "desmume_cpu_mode": "interpreter", "desmume_internal_resolution": "256x192", "desmume_screens_layout": "top/bottom", "desmume_pointer_type": "touch", "desmume_frameskip": "0" }
+    }
+  },
+  "bios": [
+    { "core": "pcsx_rearmed", "file": "scph5501.bin", "md5": "490f666e1afb15b7362b406ed1cea246", "it": "PlayStation (USA), facoltativo: senza, il BIOS è emulato", "en": "PlayStation (USA), optional: without it the BIOS is emulated" },
+    { "core": "pcsx_rearmed", "file": "scph5502.bin", "md5": "32736f17079d0b2b7024407c39bd3050", "it": "PlayStation (Europa), facoltativo", "en": "PlayStation (Europe), optional" },
+    { "core": "pcsx_rearmed", "file": "scph5500.bin", "md5": "8dd7d5296a650fac7319bce665a6a53c", "it": "PlayStation (Giappone), facoltativo", "en": "PlayStation (Japan), optional" },
+    { "core": "mgba", "file": "gba_bios.bin", "md5": "a860e8c0b6d573d191e4ec7db1b1e4f6", "it": "Game Boy Advance, facoltativo", "en": "Game Boy Advance, optional" }
+  ],
+  "avviso": { "it": "", "en": "" }
+}

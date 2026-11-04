@@ -34,6 +34,17 @@ Come funziona:
 Perché dentro l'app e non da scaricare: iOS esegue solo il codice firmato insieme all'app, quindi un emulatore nativo
 scaricato dopo non partirebbe senza JIT.
 
+## I dati del motore (si aggiornano senza nuova app)
+
+[`dati/emulatore.json`](dati/emulatore.json) contiene tutto quello che **non è codice**: estensioni riconosciute da
+ogni emulatore, opzioni (tutte senza JIT), BIOS controllati con l'impronta MD5, eventuali avvisi. Il Game Emulator lo
+scarica da qui (al massimo ogni 6 ore, quando lo apri), lo controlla e lo usa; se manca la rete usa l'ultima copia,
+o quella dentro l'app. Cambiare questo file aggiorna tutti i telefoni **senza una nuova versione dell'app**. Le prove
+di GitHub rifiutano un file scritto male.
+
+Il codice degli emulatori invece no: iOS esegue solo codice firmato insieme all'app, quindi un core nuovo arriva con
+un aggiornamento di FMLAB Linux (disco `core-<n>`).
+
 ## Lo studio: perché nativi
 
 Prima abbiamo provato RetroArch **dentro Debian** in FMLAB Linux, con [`misura/misura.sh`](misura/misura.sh). Fps

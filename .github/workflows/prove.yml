@@ -13,6 +13,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Sintassi
         run: bash -n misura/misura.sh && bash -n core/costruisci-core-ios.sh
+      - name: Dati del Game Emulator (dati/emulatore.json)
+        run: |
+          python3 - <<'PY'
+          import json, re
+          d = json.load(open("dati/emulatore.json"))
+          assert d["schema"] == 1 and re.fullmatch(r"\d{4}\.\d\d\.\d\d-\d+", d["versione"]), "schema o versione"
+          noti = {"fceumm", "gambatte", "bsnes", "pcsx_rearmed", "mgba", "desmume"}
+          assert set(d["core"]) <= noti, "core sconosciuto"
+          for n, c in d["core"].items():
+              assert c["estensioni"] and all(re.fullmatch(r"[a-z0-9]{1,5}", e) for e in c["estensioni"]), n
+              assert all(isinstance(k, str) and isinstance(v, str) and k.replace("_", "").isalnum() for k, v in c["opzioni"].items()), n
+          for b in d["bios"]:
+              assert b["core"] in noti and re.fullmatch(r"[0-9a-f]{32}", b["md5"]) and "/" not in b["file"], b
+          print("ok:", d["versione"], len(d["core"]), "core,", len(d["bios"]), "BIOS")
+          PY
 
   # Riferimento: stessa misura su un vero server ARM64 con Debian 13 (senza interprete) = velocità "nativa".
   # Sul telefono si rifà la stessa misura: il rapporto dice quanto costa l'interprete (o il JIT).
