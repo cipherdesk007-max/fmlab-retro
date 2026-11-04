@@ -9,19 +9,40 @@ ARM64 personalizzato per giocare alle console vecchie sull'iPhone, con emulatori
 > **Nessun gioco incluso.** FMLAB Retro non fornisce e non scarica giochi: li mette l'utente, solo file che
 > possiede o liberi (homebrew).
 
-## Stato: fase 1, misura
+## Installare
+
+**Dall'app** (FMLAB Linux 0.8.8 o dopo): Distribuzioni → Configura Linux… → **FMLAB Retro**. Si installa Debian 13
+ufficiale verificato, poi account e desktop, poi *Installa FMLAB Retro*. La trovi in Distribuzioni con l'icona del
+controller, accanto a Debian.
+
+**A mano**, in un Debian 13 che hai già:
+
+```sh
+B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
+sudo curl -fsSL $B/fmlab-retro.gpg -o /usr/share/keyrings/fmlab-retro.gpg
+sudo curl -fsSL $B/fmlab-retro.sources -o /etc/apt/sources.list.d/fmlab-retro.sources
+sudo apt update && sudo apt install fmlab-retro
+```
+
+Impronta della chiave: `179D FBA1 AE36 3242 B1E6 49D1 66B1 B041 7BE8 A5E2`
+(`gpg --show-keys /usr/share/keyrings/fmlab-retro.gpg`).
+
+**Aggiornare**: `sudo apt update && sudo apt upgrade`, Debian e FMLAB insieme. Le impostazioni che cambi in
+RetroArch restano (la base FMLAB si copia solo la prima volta; per rimetterla: `fmlab-retro --ripristina`).
+
+## Stato
 
 Prima di costruire la distribuzione si misura quanto regge il telefono, perché in FMLAB Linux i programmi girano
 dentro un interprete (o col JIT, con StikDebug) e un emulatore lì dentro fa doppio lavoro.
 
 | Fase | Cosa | Stato |
 |---|---|---|
-| 1 | **Misura** degli fps su NES, Game Boy, GBA (e SNES/Sega con i tuoi file) | ✅ pronta, da fare sul telefono |
-| 2 | **Pacchetti FMLAB** (`.deb`): `fmlab-retro` (emulatori + profili per console), `fmlab-tema`, `rk-giochi`, in un repository apt **firmato GPG** su GitHub Pages | in base ai numeri |
-| 3 | **Immagine** Debian 13 ARM64 (mmdebstrap su GitHub Actions) da installare con un tocco da FMLAB Linux → Distribuzioni, con impronta SHA-256 | dopo la fase 2 |
+| 1 | **Misura** degli fps su NES, Game Boy, GBA (e SNES/Sega con i tuoi file) | ✅ fatta sul telefono, si continua con JIT e GPU |
+| 2 | **Pacchetto** `fmlab-retro` (RetroArch, core, impostazioni FMLAB, `rk-giochi`, misura) in un **archivio apt firmato GPG** (ramo `apt`, costruito e provato su Debian 13 ARM64 da GitHub) | ✅ |
+| 3 | **Distribuzione nell'app**: FMLAB Linux → Configura Linux… → FMLAB Retro (Debian 13 verificato + archivio FMLAB) | ✅ FMLAB Linux 0.8.8 |
 
-Dopo l'installazione **non si riscarica mai l'immagine**: tutto si aggiorna con `apt update && apt upgrade`
-(Debian ufficiale + repository FMLAB), e le modifiche dell'utente restano.
+Non c'è un'immagine da riscaricare: tutto si aggiorna con `apt update && apt upgrade` (Debian ufficiale + archivio
+FMLAB), e le modifiche dell'utente restano.
 
 ## Fase 1: misura sul telefono
 

@@ -9,16 +9,33 @@ ARM64 customised for playing classic consoles on the iPhone, with tuned emulator
 > **No games included.** FMLAB Retro neither ships nor downloads games: users add their own, only files they own or
 > free homebrew.
 
-## Status: phase 1, measurement
+## Install
+
+**From the app** (FMLAB Linux 0.8.8 or later): Distributions → Set Up Linux… → **FMLAB Retro**. It installs verified
+official Debian 13, then account and desktop, then *Install FMLAB Retro*.
+
+**By hand**, on an existing Debian 13:
+
+```sh
+B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
+sudo curl -fsSL $B/fmlab-retro.gpg -o /usr/share/keyrings/fmlab-retro.gpg
+sudo curl -fsSL $B/fmlab-retro.sources -o /etc/apt/sources.list.d/fmlab-retro.sources
+sudo apt update && sudo apt install fmlab-retro
+```
+
+Key fingerprint: `179D FBA1 AE36 3242 B1E6 49D1 66B1 B041 7BE8 A5E2`.
+**Updating**: `sudo apt update && sudo apt upgrade` (Debian and FMLAB together); your RetroArch settings are kept.
+
+## Status
 
 Before building the distribution we measure what the phone can handle: in FMLAB Linux programs run inside an
 interpreter (or with the JIT, via StikDebug), so an emulator in there does double work.
 
 | Phase | What | Status |
 |---|---|---|
-| 1 | **Measure** fps on NES, Game Boy, GBA (and SNES/Sega with your own files) | ✅ ready, to run on the phone |
-| 2 | **FMLAB packages** (`.deb`): `fmlab-retro` (emulators + per-console profiles), `fmlab-tema`, `rk-giochi`, in a **GPG-signed** apt repository on GitHub Pages | depends on the numbers |
-| 3 | **Image**: Debian 13 ARM64 (mmdebstrap on GitHub Actions), installed with one tap from FMLAB Linux → Distributions, with a SHA-256 checksum | after phase 2 |
+| 1 | **Measure** fps on NES, Game Boy, GBA | ✅ done on the phone, continuing with JIT and GPU |
+| 2 | **Package** `fmlab-retro` in a **GPG-signed apt archive** (`apt` branch, built and tested on Debian 13 ARM64 by GitHub) | ✅ |
+| 3 | **Distribution in the app**: FMLAB Linux → Set Up Linux… → FMLAB Retro | ✅ FMLAB Linux 0.8.8 |
 
 After installation **the image is never downloaded again**: everything updates with `apt update && apt upgrade`
 (official Debian + FMLAB repository), and user changes are kept.
