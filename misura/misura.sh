@@ -40,19 +40,13 @@ core() {  # nome del core -> file .so
 mkdir -p "$CACHE/prova"
 if ! ls "$CACHE"/prova/*.nes >/dev/null 2>&1; then
   echo ">> Scarico i giochi di prova liberi (240p Test Suite per NES, Game Boy, GBA)"
-  R=pinobatch/240p-test-mini
-  # 1) API di GitHub (col token se c'è, senza ha un limite per indirizzo)
-  url=$(curl -fsSL --max-time 30 ${GITHUB_TOKEN:+-H "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/$R/releases/latest 2>/dev/null |
-        python3 -c 'import json,sys; a=json.load(sys.stdin)["assets"]; print(next(x["browser_download_url"] for x in a if x["name"].endswith(".zip")))' 2>/dev/null)
-  # 2) senza API: pagina dell'ultima versione
-  if [ -z "$url" ]; then
-    tag=$(curl -fsSIL --max-time 30 -o /dev/null -w '%{url_effective}' https://github.com/$R/releases/latest 2>/dev/null | sed 's#.*/tag/##')
-    [ -n "$tag" ] && url=$(curl -fsSL --max-time 30 "https://github.com/$R/releases/expanded_assets/$tag" 2>/dev/null |
-        grep -o 'href="[^"]*\.zip"' | grep '/releases/download/' | head -1 | sed 's#href="#https://github.com#; s#"$##')
-  fi
-  if [ -n "$url" ] && curl -fsSL --max-time 120 "$url" -o "$CACHE/prova.zip"; then
-    unzip -o -q -j "$CACHE/prova.zip" '*.nes' '*.gb' '*.gbc' '*.gba' -d "$CACHE/prova" 2>/dev/null || unzip -o -q -j "$CACHE/prova.zip" -d "$CACHE/prova"
-  else
+  # file singoli dell'ultima versione (link fisso di GitHub, senza API)
+  ok=0
+  for f in 240pee.nes gb240p.gb 240pee_mb.gba; do
+    curl -fsSL --max-time 120 "https://github.com/pinobatch/240p-test-mini/releases/latest/download/$f" -o "$CACHE/prova/$f.tmp" &&
+      mv "$CACHE/prova/$f.tmp" "$CACHE/prova/$f" && ok=1 || rm -f "$CACHE/prova/$f.tmp"
+  done
+  if [ $ok = 0 ]; then
     echo "$(v 33)! Giochi di prova non scaricati: provo solo i file che passi tu$(v 0)"
   fi
 fi
