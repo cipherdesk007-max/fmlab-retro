@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "versione": "2026.11.04-3",
+  "versione": "2026.11.04-4",
   "nota": "Dati del Game Emulator di FMLAB Linux: l'app li scarica da qui (niente codice, solo impostazioni). Gli emulatori veri sono nel disco core-<n>.",
   "core": {
     "fceumm": {
@@ -163,5 +163,9 @@
   "avviso": {
     "it": "",
     "en": ""
+  },
+  "novita": {
+    "it": "Suono NES in alta qualità, colori ai giochi Game Boy, SNES in modalità veloce, DS con 2 core per il 3D e lingua dell'app, BIOS del Famicom Disk System nell'elenco.",
+    "en": "High quality NES sound, colours for Game Boy games, SNES in fast mode, DS with 2 cores for 3D and the app's language, Famicom Disk System BIOS in the list."
   }
 }
