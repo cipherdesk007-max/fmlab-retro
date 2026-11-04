@@ -25,7 +25,7 @@ if [ "$cartella" = cmake ]; then   # mGBA: CMake
   dylib=$(find fuori -name 'mgba_libretro*.dylib' | head -1)
 else
   args=(); [ "$extra" = - ] || read -ra args <<< "$extra"
-  make -C "$cartella" -f "$makefile" platform=ios-arm64 -j"$(sysctl -n hw.ncpu)" "${args[@]}" \
+  make -C "$cartella" -f "$makefile" platform=ios-arm64 -j"$(sysctl -n hw.ncpu)" ${args[@]+"${args[@]}"} \
     IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { tail -60 "$lavoro/make.log"; exit 1; }
   dylib=$(find "$cartella" -maxdepth 3 -name '*_libretro*.dylib' -newer "$lavoro/make.log" -o -maxdepth 3 -name '*_libretro*.dylib' | head -1)
 fi
@@ -53,6 +53,7 @@ cat > "$fw/Info.plist" <<PL
 <key>FMLABCoreSource</key><string>https://github.com/libretro/$repo/tree/$commit</string>
 </dict></plist>
 PL
-nm -gU "$fw/$bin" | grep -q ' _retro_run$' || { echo "manca retro_run"; exit 1; }
+nm -gU "$fw/$bin" > "$lavoro/simboli.txt"
+grep -q ' _retro_run$' "$lavoro/simboli.txt" || { echo "manca retro_run"; exit 1; }
 lipo -archs "$fw/$bin"
 echo "OK $nome → $(basename "$fw") ($(du -h "$fw/$bin" | cut -f1))"
