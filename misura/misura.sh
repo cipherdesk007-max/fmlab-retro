@@ -6,7 +6,7 @@
 # Metodo: due giri con un numero diverso di fotogrammi; la differenza toglie il tempo di avvio.
 # Risultato a schermo e in un file nella cartella Shared (app File dell'iPhone).
 set -u
-VERSIONE=0.2.0
+VERSIONE=0.3.0
 POCHI=${POCHI:-60}       # fotogrammi del giro corto
 TANTI=${TANTI:-360}      # fotogrammi del giro lungo (300 in più = 5 s a 60 fps)
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/fmlab-retro"
@@ -77,15 +77,17 @@ done
 
 # ---------- 4) misura ----------
 giro() {  # $1 core $2 file $3 modo (1x|2x|3x|intero|intero-sdl) $4 fotogrammi -> secondi
-  local cfg t0 t1 pieno=false drv=gl scala=1.0
+  local cfg t0 t1 pieno=false drv=gl scala=1.0 filo=false
   cfg=$(mktemp)
   case "$3" in
     2x) scala=2.0 ;; 3x) scala=3.0 ;;
+    2x-filo) scala=2.0; filo=true ;;        # video in un filo a parte: emulatore e disegno in parallelo
     intero) pieno=true ;;
+    intero-filo) pieno=true; filo=true ;;
     intero-sdl) pieno=true; drv=sdl2 ;;   # ingrandimento fatto da SDL invece che da OpenGL software
   esac
   # Debian non ha il video "null": 1x = finestra piccola (quasi solo il processore)
-  printf 'video_driver = "%s"\nvideo_scale = "%s"\nvideo_smooth = "false"\nvideo_windowed_fullscreen = "true"\nvideo_vsync = "false"\naudio_driver = "null"\naudio_sync = "false"\nvideo_fullscreen = "%s"\nconfig_save_on_exit = "false"\npause_nonactive = "false"\nnotification_show_autoconfig = "false"\n' "$drv" "$scala" "$pieno" > "$cfg"
+  printf 'video_driver = "%s"\nvideo_scale = "%s"\nvideo_smooth = "false"\nvideo_windowed_fullscreen = "true"\nvideo_vsync = "false"\nvideo_threaded = "%s"\naudio_driver = "null"\naudio_sync = "false"\nvideo_fullscreen = "%s"\nconfig_save_on_exit = "false"\npause_nonactive = "false"\nnotification_show_autoconfig = "false"\n' "$drv" "$scala" "$filo" "$pieno" > "$cfg"
   t0=$(date +%s.%N)
   timeout 600 retroarch --config "$cfg" -L "$1" "$2" --max-frames="$4" >"$CACHE/retroarch.log" 2>&1
   local e=$?
@@ -111,7 +113,7 @@ print('giocabile' if f>=60 else 'quasi (con frameskip)' if f>=45 else 'troppo le
 }
 
 [ -n "${DISPLAY:-}" ] || { echo "$(v 31)✘ Serve il desktop: lancia la misura dal terminale del desktop di FMLAB Linux$(v 0)"; exit 1; }
-modi=(${MODI:-1x 2x 3x intero})   # dal più leggero al più pesante: dove crolla si vede cosa costa
+modi=(${MODI:-1x 2x 2x-filo 3x intero intero-filo})   # dal più leggero al più pesante: dove crolla si vede cosa costa
 app=$(grep -o 'FMLAB-Linux/[^ ]*' /proc/ish/version 2>/dev/null || echo "fuori da FMLAB Linux")
 jit=$(grep -m1 -i mode /proc/ish/jit 2>/dev/null | sed 's/.*: //'); jit=${jit:-non disponibile}
 quando=$(date '+%Y-%m-%d %H:%M')
