@@ -48,8 +48,12 @@ Fps a schermo intero (tra parentesi finestra 1x). 60 = velocità vera.
 | Data | Dove | JIT | GPU | NES | Game Boy | GBA | SNES |
 |---|---|---|---|---|---|---|---|
 | 2026-11-04 | riferimento: server ARM64 GitHub, Debian 13, RetroArch 1.20, **senza interprete** | — | software | 260 (932) | 300 (2158) | 253 (5882*) | — |
-| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, senza JIT | no | | *da misurare* | | | |
-| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, con JIT | sì | | *da misurare* | | | |
+| 2026-11-04 | **iPhone 15 Pro Max**, FMLAB Linux 0.8.7, Debian 13, misura 0.1.1 | no | software | **7.9** (61) | **9.0** (195) | **7.7** (126) | — |
+| | iPhone 15 Pro Max, FMLAB Linux 0.8.7, con JIT | sì | | *da misurare* | | | |
+
+**Cosa dicono i numeri del telefono**: il processore ce la fa (NES 61, Game Boy 195, GBA 126 fps in finestra 1x
+anche senza JIT), il collo di bottiglia è **ingrandire l'immagine a tutto schermo** con OpenGL software (~8 fps).
+Dalla misura 0.2.0 si provano anche 2x, 3x e lo schermo intero ingrandito da SDL, per trovare il modo più veloce.
 
 \* il menu di prova GBA è quasi fermo e mGBA salta i cicli a vuoto: col gioco vero sarà molto meno.
 
