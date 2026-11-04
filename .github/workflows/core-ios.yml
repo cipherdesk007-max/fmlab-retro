@@ -1,0 +1,62 @@
+name: core-ios
+# Emulatori nativi per iPhone (core libretro, arm64, senza JIT) per il Game Emulator di FMLAB Linux.
+# Ogni core da un commit fisso (core/core.tsv), dentro un .framework; il pacchetto esce come
+# pubblicazione "core-<numero>" con l'impronta SHA-256 che l'app controlla.
+on:
+  push:
+    branches: [main]
+    paths: ["core/**", ".github/workflows/core-ios.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  core:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nome: [fceumm, gambatte, mgba, bsnes, pcsx_rearmed, desmume]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Strumenti
+        run: brew install ninja >/dev/null 2>&1 || true
+      - name: Compila ${{ matrix.nome }}
+        run: core/costruisci-core-ios.sh ${{ matrix.nome }} fuori
+      - uses: actions/upload-artifact@v4
+        with:
+          name: core-${{ matrix.nome }}
+          path: fuori
+  pacchetto:
+    needs: core
+    if: always()
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: scaricati }
+      - name: Disco emulatore
+        run: |
+          set -euo pipefail
+          mkdir -p FMLAB-Core
+          for d in scaricati/core-*/*.framework; do cp -R "$d" FMLAB-Core/; done
+          ls FMLAB-Core
+          [ "$(ls -d FMLAB-Core/*.framework | wc -l)" -ge 3 ] || { echo "troppi core falliti"; exit 1; }
+          python3 - <<'PY'
+          import plistlib, glob, json, os, hashlib
+          voci=[]
+          for fw in sorted(glob.glob("FMLAB-Core/*.framework")):
+              p=plistlib.load(open(fw+"/Info.plist","rb")); b=fw+"/"+p["CFBundleExecutable"]
+              voci.append(dict(framework=os.path.basename(fw), core=p["FMLABCoreName"], console=p["FMLABCoreConsole"],
+                  source=p["FMLABCoreSource"], bytes=os.path.getsize(b), sha256=hashlib.sha256(open(b,"rb").read()).hexdigest()))
+          json.dump(dict(schema=1, core=voci), open("FMLAB-Core/core.json","w"), indent=2)
+          print(json.dumps(voci, indent=1))
+          PY
+          ditto -c -k --keepParent --norsrc FMLAB-Core FMLAB-Core.zip
+          shasum -a 256 FMLAB-Core.zip | tee FMLAB-Core.zip.sha256
+      - name: Pubblica
+        if: github.ref == 'refs/heads/main'
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          tag="core-${{ github.run_number }}"
+          gh release create "$tag" FMLAB-Core.zip FMLAB-Core.zip.sha256 FMLAB-Core/core.json \
+            --title "Disco emulatore $tag" --notes "Core libretro nativi per iPhone (arm64, senza JIT). Nessun gioco incluso. Impronta: $(cut -d' ' -f1 FMLAB-Core.zip.sha256)"

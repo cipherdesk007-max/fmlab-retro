@@ -1,0 +1,7 @@
+# nome	console	repository libretro	commit fisso	cartella del Makefile	Makefile	argomenti in più
+fceumm	NES	libretro-fceumm	e0f3086a8104f8fbbe49a2615b10401504a9533f	.	Makefile.libretro	-
+gambatte	Game Boy / Color	gambatte-libretro	77f2567d718b8973d02caa2daa8dce4953faf811	.	Makefile.libretro	-
+mgba	Game Boy Advance	mgba	7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6	cmake	-	-
+bsnes	Super Nintendo	bsnes	63ee22f7af8f5d1ada295c2c98fd7bf261fa62a7	.	Makefile	-
+pcsx_rearmed	PlayStation	pcsx_rearmed	7b0e8f8fadfbce3d170d195b9d9eecaabfa08c8e	.	Makefile.libretro	-
+desmume	Nintendo DS	desmume	95b4d798731caa809125b6c3c11d17cc332ff6ef	desmume/src/frontend/libretro	Makefile.libretro	-
