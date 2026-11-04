@@ -26,7 +26,10 @@ jobs:
       - name: Programmi
         run: apt-get update -qq && apt-get install -y -qq --no-install-recommends xvfb xauth ca-certificates curl python3 unzip >/dev/null
       - name: Misura (calcolo e video, Xvfb software)
-        run: xvfb-run -a -s "-screen 0 1308x644x24" bash misura/misura.sh 2>&1 | tee misura-arm64.txt
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: set -o pipefail; xvfb-run -a -s "-screen 0 1308x644x24" bash misura/misura.sh 2>&1 | tee misura-arm64.txt
       - uses: actions/upload-artifact@v4
         with:
           name: misura-arm64
