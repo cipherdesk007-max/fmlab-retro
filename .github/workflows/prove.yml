@@ -30,6 +30,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: set -o pipefail; xvfb-run -a -s "-screen 0 1308x644x24" bash misura/misura.sh 2>&1 | tee misura-arm64.txt
+      - name: Core libretro disponibili in Debian 13 ARM64
+        if: always()
+        run: apt-cache search --names-only '^libretro-' | sort
       - name: Errori di RetroArch (se ci sono)
         if: always()
         run: cat "${XDG_CACHE_HOME:-$HOME/.cache}/fmlab-retro/errori.log" 2>/dev/null | head -60 || true

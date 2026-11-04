@@ -111,7 +111,7 @@ print('giocabile' if f>=60 else 'quasi (con frameskip)' if f>=45 else 'troppo le
 }
 
 [ -n "${DISPLAY:-}" ] || { echo "$(v 31)✘ Serve il desktop: lancia la misura dal terminale del desktop di FMLAB Linux$(v 0)"; exit 1; }
-modi=(${MODI:-1x 2x 3x intero intero-sdl})   # dal più leggero al più pesante: dove crolla si vede cosa costa
+modi=(${MODI:-1x 2x 3x intero})   # dal più leggero al più pesante: dove crolla si vede cosa costa
 app=$(grep -o 'FMLAB-Linux/[^ ]*' /proc/ish/version 2>/dev/null || echo "fuori da FMLAB Linux")
 jit=$(grep -m1 -i mode /proc/ish/jit 2>/dev/null | sed 's/.*: //'); jit=${jit:-non disponibile}
 quando=$(date '+%Y-%m-%d %H:%M')
