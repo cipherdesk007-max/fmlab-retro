@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "versione": "2026.11.04-2",
+  "versione": "2026.11.04-3",
   "nota": "Dati del Game Emulator di FMLAB Linux: l'app li scarica da qui (niente codice, solo impostazioni). Gli emulatori veri sono nel disco core-<n>.",
   "core": {
     "fceumm": {
@@ -11,15 +11,16 @@
         "unif"
       ],
       "opzioni": {
-        "fceumm_aspect": "8:7 PAR"
+        "fceumm_aspect": "8:7 PAR",
+        "fceumm_sndquality": "High"
       },
       "nome": {
         "it": "NES / Famicom",
         "en": "NES / Famicom"
       },
       "nota": {
-        "it": "Anche Famicom Disk System: metti disksys.rom in BIOS.",
-        "en": "Famicom Disk System too: put disksys.rom in BIOS."
+        "it": "Suono in alta qualità. Anche Famicom Disk System: metti disksys.rom in BIOS.",
+        "en": "High quality sound. Famicom Disk System too: put disksys.rom in BIOS."
       }
     },
     "gambatte": {
@@ -28,14 +29,16 @@
         "gbc",
         "dmg"
       ],
-      "opzioni": {},
+      "opzioni": {
+        "gambatte_gb_colorization": "auto"
+      },
       "nome": {
         "it": "Game Boy / Color",
         "en": "Game Boy / Color"
       },
       "nota": {
-        "it": "Game Boy e Game Boy Color, salvataggi automatici.",
-        "en": "Game Boy and Game Boy Color, automatic saves."
+        "it": "I giochi Game Boy hanno i colori come su un Game Boy Color; salvataggi automatici.",
+        "en": "Game Boy games get Game Boy Color colours; automatic saves."
       }
     },
     "bsnes": {
@@ -44,14 +47,18 @@
         "smc",
         "bs"
       ],
-      "opzioni": {},
+      "opzioni": {
+        "bsnes_ppu_fast": "ON",
+        "bsnes_dsp_fast": "ON",
+        "bsnes_aspect_ratio": "Auto"
+      },
       "nome": {
         "it": "Super Nintendo",
         "en": "Super Nintendo"
       },
       "nota": {
-        "it": "Molto fedele all'originale; usa X, Y, L e R.",
-        "en": "Very accurate; uses X, Y, L and R."
+        "it": "Molto fedele all'originale, in modalità veloce; usa X, Y, L e R.",
+        "en": "Very accurate, in fast mode; uses X, Y, L and R."
       }
     },
     "pcsx_rearmed": {
@@ -65,16 +72,15 @@
         "bin"
       ],
       "opzioni": {
-        "pcsx_rearmed_drc": "disabled",
-        "pcsx_rearmed_frameskip": "0"
+        "pcsx_rearmed_bios": "auto"
       },
       "nome": {
         "it": "PlayStation",
         "en": "PlayStation"
       },
       "nota": {
-        "it": "Dischi .cue + .bin, .chd o .pbp. BIOS facoltativo.",
-        "en": "Discs as .cue + .bin, .chd or .pbp. BIOS optional."
+        "it": "Dischi .cue + .bin, .chd o .pbp. Senza BIOS va lo stesso (emulato); col BIOS vero è più compatibile.",
+        "en": "Discs as .cue + .bin, .chd or .pbp. Works without a BIOS (emulated); a real BIOS is more compatible."
       }
     },
     "mgba": {
@@ -82,7 +88,8 @@
         "gba"
       ],
       "opzioni": {
-        "mgba_skip_bios": "ON"
+        "mgba_skip_bios": "ON",
+        "mgba_use_bios": "ON"
       },
       "nome": {
         "it": "Game Boy Advance",
@@ -99,22 +106,31 @@
       ],
       "opzioni": {
         "desmume_cpu_mode": "interpreter",
+        "desmume_num_cores": "2",
         "desmume_internal_resolution": "256x192",
         "desmume_screens_layout": "top/bottom",
         "desmume_pointer_type": "touch",
-        "desmume_frameskip": "0"
+        "desmume_frameskip": "0",
+        "desmume_firmware_language": "Auto"
       },
       "nome": {
         "it": "Nintendo DS",
         "en": "Nintendo DS"
       },
       "nota": {
-        "it": "Tocca lo schermo di sotto per il pennino.",
-        "en": "Touch the bottom screen for the stylus."
+        "it": "Tocca lo schermo di sotto per il pennino. Il 3D usa 2 core del processore; la lingua del DS segue quella dell'app.",
+        "en": "Touch the bottom screen for the stylus. 3D uses 2 CPU cores; the DS language follows the app."
       }
     }
   },
   "bios": [
+    {
+      "core": "fceumm",
+      "file": "disksys.rom",
+      "md5": "ca30b50f880eb660a320674ed365ef7a",
+      "it": "Famicom Disk System, serve solo per i giochi .fds",
+      "en": "Famicom Disk System, only needed for .fds games"
+    },
     {
       "core": "pcsx_rearmed",
       "file": "scph5501.bin",
