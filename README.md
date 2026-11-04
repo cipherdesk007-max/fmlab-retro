@@ -43,9 +43,15 @@ Da provare tre volte: senza JIT, col JIT (StikDebug), e con *Grafica → GPU Met
 
 ### Risultati
 
-| Data | Telefono · iOS | App | JIT | GPU | NES | Game Boy | GBA | SNES |
-|---|---|---|---|---|---|---|---|---|
-| — | riferimento: server ARM64, Debian 13, senza interprete (CI) | — | — | software | vedi [prove](../../actions/workflows/prove.yml) | | | |
+Fps a schermo intero (tra parentesi finestra 1x). 60 = velocità vera.
+
+| Data | Dove | JIT | GPU | NES | Game Boy | GBA | SNES |
+|---|---|---|---|---|---|---|---|
+| 2026-11-04 | riferimento: server ARM64 GitHub, Debian 13, RetroArch 1.20, **senza interprete** | — | software | 260 (932) | 300 (2158) | 253 (5882*) | — |
+| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, senza JIT | no | | *da misurare* | | | |
+| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, con JIT | sì | | *da misurare* | | | |
+
+\* il menu di prova GBA è quasi fermo e mGBA salta i cicli a vuoto: col gioco vero sarà molto meno.
 
 ## I giochi: `rk-giochi`
 

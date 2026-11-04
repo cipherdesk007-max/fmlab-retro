@@ -41,6 +41,18 @@ curl -fsSL https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/main/
 
 Run it three ways: without JIT, with JIT (StikDebug), and with *Graphics → Metal GPU* on and off.
 
+### Results
+
+Full-screen fps (1x window in brackets). 60 = full speed.
+
+| Date | Where | JIT | GPU | NES | Game Boy | GBA | SNES |
+|---|---|---|---|---|---|---|---|
+| 2026-11-04 | reference: GitHub ARM64 server, Debian 13, RetroArch 1.20, **no interpreter** | — | software | 260 (932) | 300 (2158) | 253 (5882*) | — |
+| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, no JIT | no | | *to measure* | | | |
+| | iPhone 15 Pro Max, FMLAB Linux 0.8.6, with JIT | yes | | *to measure* | | | |
+
+\* the GBA test menu is nearly static and mGBA skips idle loops: a real game will be much lower.
+
 ## Games: `rk-giochi`
 
 ```sh

@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Programmi
         run: apt-get update -qq && apt-get install -y -qq --no-install-recommends xvfb xauth ca-certificates curl python3 unzip >/dev/null
-      - name: Misura (calcolo e video, Xvfb software)
+      - name: Misura (finestra 1x e schermo intero, Xvfb software)
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
