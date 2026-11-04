@@ -12,9 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Sintassi
-        run: bash -n misura/misura.sh && bash -n strumenti/rk-giochi && bash -n tests/test_rk_giochi.sh
-      - name: rk-giochi
-        run: bash tests/test_rk_giochi.sh
+        run: bash -n misura/misura.sh && bash -n core/costruisci-core-ios.sh
 
   # Riferimento: stessa misura su un vero server ARM64 con Debian 13 (senza interprete) = velocità "nativa".
   # Sul telefono si rifà la stessa misura: il rapporto dice quanto costa l'interprete (o il JIT).

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=FMLAB Retro
-Comment=Console classiche (i giochi li metti tu)
-Exec=fmlab-retro
-Icon=retroarch
-Terminal=false
-Categories=Game;Emulator;

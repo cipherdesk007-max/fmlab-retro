@@ -1,128 +1,61 @@
-# FMLAB Retro 🎮🐧
+# FMLAB Retro 🎮
 
 🇮🇹 Italiano · [🇬🇧 English](README.en.md)
 
-Distribuzione **FMLAB Retro** per [FMLAB Linux](https://github.com/cipherdesk007-max/fmlab-Linux-io): Debian 13
-ARM64 personalizzato per giocare alle console vecchie sull'iPhone, con emulatori già regolati, tema FMLAB e
-[RunnerKit](https://github.com/cipherdesk007-max/FMlab---RunnerKit).
+La **fabbrica degli emulatori** del Game Emulator di [FMLAB Linux](https://github.com/cipherdesk007-max/fmlab-Linux-io):
+qui si compilano per iPhone gli emulatori che l'app porta con sé, e c'è lo studio che ha portato a farli nativi.
 
-> **Nessun gioco incluso.** FMLAB Retro non fornisce e non scarica giochi: li mette l'utente, solo file che
-> possiede o liberi (homebrew).
+> **Nessun gioco incluso.** FMLAB non fornisce e non scarica giochi: li mette l'utente, solo file che possiede o
+> homebrew liberi.
 
-## Il disco emulatore (Game Emulator di FMLAB Linux)
+## Il disco emulatore
 
-Dalla 0.9.0 di FMLAB Linux i giochi non passano più da Linux: l'app ha il **Game Emulator**, con gli emulatori
-**nativi per iPhone** (arm64, senza JIT) che questo progetto compila. Sono i core libretro, gli stessi di RetroArch:
+Emulatori **nativi per iPhone** (arm64, iOS 15+, **senza JIT**), dai core libretro ufficiali, gli stessi di RetroArch:
 
 | Console | Core | Sorgente |
 |---|---|---|
-| NES | FCEUmm | libretro/libretro-fceumm |
-| Game Boy / Color | Gambatte | libretro/gambatte-libretro |
-| Game Boy Advance | mGBA | libretro/mgba |
-| Super Nintendo | bsnes | libretro/bsnes |
-| PlayStation | PCSX ReARMed (interprete) | libretro/pcsx_rearmed |
-| Nintendo DS | DeSmuME (interprete) | libretro/desmume |
+| NES | FCEUmm | [libretro/libretro-fceumm](https://github.com/libretro/libretro-fceumm) |
+| Game Boy / Color | Gambatte | [libretro/gambatte-libretro](https://github.com/libretro/gambatte-libretro) |
+| Game Boy Advance | mGBA | [libretro/mgba](https://github.com/libretro/mgba) |
+| Super Nintendo | bsnes | [libretro/bsnes](https://github.com/libretro/bsnes) |
+| PlayStation | PCSX ReARMed (interprete) | [libretro/pcsx_rearmed](https://github.com/libretro/pcsx_rearmed) |
+| Nintendo DS | DeSmuME (interprete) | [libretro/desmume](https://github.com/libretro/desmume) |
 
-- Commit fissi in [`core/core.tsv`](core/core.tsv), compilati da GitHub ([core-ios](.github/workflows/core-ios.yml)), uno
-  `.framework` per core. La pubblicazione `core-<n>` ha `FMLAB-Core.zip`, la sua impronta SHA-256 e `core.json`
-  (sorgente, dimensione e impronta di ogni core).
-- FMLAB Linux fissa tag e impronta in `app/FMLAB/Emulatore/DISCO` e controlla l'impronta a ogni compilazione.
-- Nessun gioco incluso: li mette l'utente (app File › FMLAB Linux › Giochi).
+Come funziona:
 
-## FMLAB Retro su Debian (facoltativo)
+1. [`core/core.tsv`](core/core.tsv) fissa un commit per ogni core.
+2. GitHub ([core-ios](.github/workflows/core-ios.yml)) li compila con [`core/costruisci-core-ios.sh`](core/costruisci-core-ios.sh),
+   uno `.framework` per core, e controlla che ci sia `retro_run`.
+3. Esce la pubblicazione **`core-<n>`** con `FMLAB-Core.zip`, la sua impronta SHA-256 e `core.json` (sorgente,
+   dimensione e impronta di ogni core).
+4. FMLAB Linux fissa tag e impronta in `app/FMLAB/Emulatore/DISCO`, li controlla a ogni compilazione e mette gli
+   emulatori dentro l'ipa, firmati con l'app.
 
-Per chi vuole RetroArch dentro Linux c'è ancora il pacchetto `fmlab-retro` nell'archivio apt firmato. È più lento del
-Game Emulator, perché passa dall'interprete.
+Perché dentro l'app e non da scaricare: iOS esegue solo il codice firmato insieme all'app, quindi un emulatore nativo
+scaricato dopo non partirebbe senza JIT.
 
-## Installare
+## Lo studio: perché nativi
 
-In un Debian 13 che hai già:
+Prima abbiamo provato RetroArch **dentro Debian** in FMLAB Linux, con [`misura/misura.sh`](misura/misura.sh). Fps
+sull'iPhone 15 Pro Max senza JIT, finestra 1x · 2x · 3x · schermo intero (60 = velocità vera):
 
-```sh
-B=https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/apt
-sudo curl -fsSL $B/fmlab-retro.gpg -o /usr/share/keyrings/fmlab-retro.gpg
-sudo curl -fsSL $B/fmlab-retro.sources -o /etc/apt/sources.list.d/fmlab-retro.sources
-sudo apt update && sudo apt install fmlab-retro
-```
-
-Impronta della chiave: `179D FBA1 AE36 3242 B1E6 49D1 66B1 B041 7BE8 A5E2`
-(`gpg --show-keys /usr/share/keyrings/fmlab-retro.gpg`).
-
-**Aggiornare**: `sudo apt update && sudo apt upgrade`, Debian e FMLAB insieme. Le impostazioni che cambi in
-RetroArch restano (la base FMLAB si copia solo la prima volta; per rimetterla: `fmlab-retro --ripristina`).
-
-## Stato
-
-Prima di costruire la distribuzione si misura quanto regge il telefono, perché in FMLAB Linux i programmi girano
-dentro un interprete (o col JIT, con StikDebug) e un emulatore lì dentro fa doppio lavoro.
-
-| Fase | Cosa | Stato |
+| Console | iPhone, dentro Linux | Server ARM64 nativo (riferimento) |
 |---|---|---|
-| 1 | **Misura** degli fps su NES, Game Boy, GBA (e SNES/Sega con i tuoi file) | ✅ fatta sul telefono, si continua con JIT e GPU |
-| 2 | **Pacchetto** `fmlab-retro` (RetroArch, core, impostazioni FMLAB, `rk-giochi`, misura) in un **archivio apt firmato GPG** (ramo `apt`, costruito e provato su Debian 13 ARM64 da GitHub) | ✅ |
-| 3 | **Game Emulator nativo** nell'app (disco emulatore `core-<n>`), al posto della Debian per i giochi | ✅ FMLAB Linux 0.9.0 |
+| NES | 68 · 30 · 19 · 10 | 1107 · 453 · 265 · 257 |
+| Game Boy | 154 · 67 · 34 · 10 | 2308 · 898 · 569 · 269 |
+| GBA | 131 · 45 · 22 · 9 | 962 · 414 · 607 · 251 |
 
-Non c'è un'immagine da riscaricare: tutto si aggiorna con `apt update && apt upgrade` (Debian ufficiale + archivio
-FMLAB), e le modifiche dell'utente restano.
-
-## Fase 1: misura sul telefono
-
-Nel terminale del desktop di FMLAB Linux (pallino >_ di TouchPad), con Debian:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/main/misura/misura.sh -o /tmp/misura.sh && bash /tmp/misura.sh
-```
-
-- Installa RetroArch e i core più leggeri da Debian (Nestopia, Gambatte, mGBA; SNES e Sega se disponibili).
-- Scarica i giochi di prova liberi **240p Test Suite** (Damian Yerrick, GPL) dalla loro pagina GitHub.
-- Per ogni console misura due cose: **1x** (finestra piccola: quasi solo il processore) e **intero** (a schermo
-  intero, col disegno vero). Metodo: due giri da 120 e 720 fotogrammi, fps = differenza diviso tempo, così l'avvio non conta.
-  60 fps = velocità vera.
-- Con un tuo file: `bash /tmp/misura.sh mio-gioco.sfc`.
-- Il risultato va anche in un file in **Shared** (app File → FMLAB Linux → Shared): mandalo per la tabella qui sotto.
-
-Da provare tre volte: senza JIT, col JIT (StikDebug), e con *Grafica → GPU Metal* accesa e spenta.
-
-### Risultati
-
-Fps a schermo intero (tra parentesi finestra 1x). 60 = velocità vera.
-
-| Data | Dove | JIT | GPU | NES | Game Boy | GBA | SNES |
-|---|---|---|---|---|---|---|---|
-| 2026-11-04 | riferimento: server ARM64 GitHub, Debian 13, RetroArch 1.20, **senza interprete** | — | software | 260 (932) | 300 (2158) | 253 (5882*) | — |
-| 2026-11-04 | **iPhone 15 Pro Max**, FMLAB Linux 0.8.7, Debian 13, misura 0.1.1 | no | software | **7.9** (61) | **9.0** (195) | **7.7** (126) | — |
-| | iPhone 15 Pro Max, FMLAB Linux 0.8.7, con JIT | sì | | *da misurare* | | | |
-
-**Cosa dicono i numeri del telefono**: il processore ce la fa (NES 61, Game Boy 195, GBA 126 fps in finestra 1x
-anche senza JIT), il collo di bottiglia è **ingrandire l'immagine a tutto schermo** con OpenGL software (~8 fps).
-Dalla misura 0.2.0 si provano anche 2x, 3x e lo schermo intero ingrandito da SDL, per trovare il modo più veloce.
-
-\* il menu di prova GBA è quasi fermo e mGBA salta i cicli a vuoto: col gioco vero sarà molto meno.
-
-## I giochi: `rk-giochi`
-
-```sh
-rk-giochi importa            # prende i file messi in Shared/Giochi (app File dell'iPhone)
-rk-giochi scarica LINK       # scarica da un link che dai tu
-rk-giochi elenco             # cosa c'è, per console
-rk-giochi togli NOME         # elimina
-rk-giochi bios FILE          # BIOS (li metti tu)
-```
-
-Riconosce la console dall'estensione (anche dentro gli zip), mette i file in `~/Giochi/<console>/` e crea gli elenchi
-di RetroArch (*FMLAB Retro - NES*, …). Accetta solo link http(s). Sarà nel pacchetto `rk-giochi` (fase 2);
-intanto: `curl -fsSL https://raw.githubusercontent.com/cipherdesk007-max/fmlab-retro/main/strumenti/rk-giochi -o /usr/local/bin/rk-giochi && chmod +x /usr/local/bin/rk-giochi`.
+Dentro Linux l'interprete rallenta tutto da 15 a 25 volte, e disegnare a schermo intero lo affossa. Nativi, gli stessi
+core vanno molte volte oltre i 60 fps: per questo il Game Emulator li porta direttamente nell'app.
 
 ## Come si verifica
 
-- A ogni modifica GitHub prova `rk-giochi` con file finti e rifà la misura su un **server ARM64 vero con Debian 13**
-  ([prove](.github/workflows/prove.yml)): è la velocità "nativa" di riferimento. Il rapporto tra quella e la misura sul
-  telefono dice quanto costa l'interprete o il JIT.
-- Chiunque con lo stesso telefono rifà la misura con lo stesso comando e confronta: differenze sotto il 10% non contano.
-- Fase 2: `apt policy fmlab-retro` deve mostrare il repository FMLAB firmato; `apt` deve rifiutare pacchetti non firmati;
-  dopo `apt upgrade` le impostazioni cambiate a mano restano (prova automatica).
+- Ogni `core-<n>` ha l'impronta SHA-256 pubblicata. L'app rifiuta di compilarsi se il file scaricato non corrisponde.
+- Ogni core si può ricompilare dal commit scritto in `core/core.tsv` e confrontare.
+- Sul telefono: Game Emulator, un gioco di prova libero (es. 240pee.nes della
+  [240p Test Suite](https://github.com/pinobatch/240p-test-mini)), tasti, rotazione, salva e carica stato.
 
 ## Licenza e riconoscimenti
 
-Codice di FMLAB Retro: MIT. RetroArch, i core libretro e Debian hanno le loro licenze (GPL e altre) e arrivano dai
-pacchetti ufficiali di Debian. 240p Test Suite: Artemio Urbina e Damian Yerrick (GPL), scaricata dalla loro pagina.
+Script di FMLAB Retro: MIT. I core hanno le loro licenze (GPL, MPL per mGBA) e arrivano dai repository libretro
+indicati sopra, senza modifiche.
