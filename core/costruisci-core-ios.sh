@@ -27,7 +27,7 @@ if [ "$cartella" = cmake ]; then   # mGBA: CMake
 else
   args=(); [ "$extra" = - ] || read -ra args <<< "$extra"
   make -C "$cartella" -f "$makefile" platform=ios-arm64 -j"$(sysctl -n hw.ncpu)" ${args[@]+"${args[@]}"} \
-    IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { tail -60 "$lavoro/make.log"; exit 1; }
+    IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { echo "--- primi comandi:"; grep -m 3 -E '^(clang|cc |c\+\+|xcrun)' "$lavoro/make.log" | cut -c1-2500; echo "---"; tail -60 "$lavoro/make.log"; exit 1; }
   dylib=$(find "$cartella" -maxdepth 3 -name '*_libretro*.dylib' -newer "$lavoro/make.log" -o -maxdepth 3 -name '*_libretro*.dylib' | head -1)
 fi
 [ -f "$dylib" ] || { echo "dylib non trovata"; exit 1; }
