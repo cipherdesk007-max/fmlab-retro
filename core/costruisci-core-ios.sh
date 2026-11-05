@@ -3,6 +3,7 @@
 # firmabile da SideStore/LiveContainer insieme all'app.
 #   core/costruisci-core-ios.sh NOME USCITA     (NOME da core/core.tsv)
 set -euo pipefail
+qui=$(cd "$(dirname "$0")" && pwd)
 nome=$1; uscita=$(mkdir -p "$2" && cd "$2" && pwd)
 riga=$(awk -F'\t' -v n="$nome" '$1==n' "$(dirname "$0")/core.tsv")
 [ -n "$riga" ] || { echo "core sconosciuto: $nome"; exit 2; }
@@ -13,6 +14,8 @@ case "$repo" in */*) url="https://github.com/$repo" ;; *) url="https://github.co
 git remote add origin "$url"
 git fetch -q --depth 1 origin "$commit" && git checkout -q FETCH_HEAD
 git submodule update -q --init --recursive --depth 1 || true
+# correzioni nostre per iPhone, se servono (core/correzioni/NOME.sh)
+if [ -f "$qui/correzioni/$nome.sh" ]; then bash "$qui/correzioni/$nome.sh"; fi
 export IOSSDK=$(xcrun --sdk iphoneos --show-sdk-path)
 MIN=15.0
 if [ "$cartella" = cmake ]; then   # mGBA: CMake
