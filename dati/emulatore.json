@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "versione": "2026.11.05-1",
+  "versione": "2026.11.05-2",
   "nota": "Dati del Game Emulator di FMLAB Linux: l'app li scarica da qui (niente codice, solo impostazioni). Gli emulatori veri sono nel disco core-<n>.",
   "core": {
     "fceumm": {
@@ -120,8 +120,8 @@
         "en": "Nintendo DS"
       },
       "nota": {
-        "it": "Tocca lo schermo di sotto per il pennino. Il 3D usa 2 core del processore; la lingua del DS segue quella dell'app.",
-        "en": "Touch the bottom screen for the stylus. 3D uses 2 CPU cores; the DS language follows the app."
+        "it": "Tocca lo schermo di sotto per il pennino. In orizzontale lo schermo principale va a tutta altezza (menu › Schermi DS in orizzontale). Il 3D usa 2 core; la lingua del DS segue quella dell'app.",
+        "en": "Touch the bottom screen for the stylus. In landscape the main screen goes full height (menu › DS Screens in Landscape). 3D uses 2 cores; the DS language follows the app."
       }
     }
   },
@@ -167,7 +167,7 @@
     "en": ""
   },
   "novita": {
-    "it": "PlayStation e Game Boy Advance saltano un fotogramma da soli quando il telefono non ce la fa, così il gioco resta a velocità piena (serve FMLAB Linux 0.10.0).",
-    "en": "PlayStation and Game Boy Advance skip a frame by themselves when the phone can't keep up, so games stay at full speed (needs FMLAB Linux 0.10.0)."
+    "it": "Note del Nintendo DS aggiornate: come avere lo schermo a tutta altezza in orizzontale (serve FMLAB Linux 0.10.4). Prova anche che l'app chieda prima di aggiornare.",
+    "en": "Nintendo DS notes updated: how to get the full-height screen in landscape (needs FMLAB Linux 0.10.4). Also a check that the app asks before updating."
   }
 }
