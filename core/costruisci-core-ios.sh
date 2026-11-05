@@ -34,10 +34,10 @@ else
     # nella Makefile di PPSSPP "ios-arm64" finisce nel ramo Linux arm64 (cerca "arm64" prima di "ios"):
     # si usa "ios" e si danno a mano i compilatori arm64 per iPhone
     piattaforma=ios
-    args+=("CC=clang -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN -DMOBILE_DEVICE -DLUA_USE_IOS" "CXX=clang++ -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN -DMOBILE_DEVICE -DLUA_USE_IOS" "MINVERSION=-miphoneos-version-min=$MIN")
+    args+=("CC=clang -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN -DMOBILE_DEVICE -DLUA_USE_IOS -DHAVE_SYSCTLBYNAME" "CXX=clang++ -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN -DMOBILE_DEVICE -DLUA_USE_IOS -DHAVE_SYSCTLBYNAME" "MINVERSION=-miphoneos-version-min=$MIN")
   fi
-  make -C "$cartella" -f "$makefile" platform=$piattaforma -j"$(sysctl -n hw.ncpu)" ${args[@]+"${args[@]}"} \
-    IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { echo "--- primi comandi:"; grep -m 3 -E '^(clang|cc |c\+\+|xcrun)' "$lavoro/make.log" | cut -c1-2500; echo "---"; tail -60 "$lavoro/make.log"; exit 1; }
+  make -k -C "$cartella" -f "$makefile" platform=$piattaforma -j"$(sysctl -n hw.ncpu)" ${args[@]+"${args[@]}"} \
+    IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { echo "--- primi comandi:"; grep -m 3 -E '^(clang|cc |c\+\+|xcrun)' "$lavoro/make.log" | cut -c1-2500; echo "---"; grep -E "error:|Undefined|ld: " "$lavoro/make.log" | sort -u | head -60; echo "---"; tail -30 "$lavoro/make.log"; exit 1; }
   dylib=$(find "$cartella" -maxdepth 3 -name '*_libretro*.dylib' -newer "$lavoro/make.log" -o -maxdepth 3 -name '*_libretro*.dylib' | head -1)
 fi
 [ -f "$dylib" ] || { echo "dylib non trovata"; exit 1; }
