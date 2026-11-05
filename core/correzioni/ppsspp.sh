@@ -16,4 +16,9 @@ assert 'impl_aarch64_macos_or_iphone' in s
 s=s.replace('ifneq ($(PLATFORM_EXT), win32)\nSOURCES_C += \\\n\t$(EXTDIR)/cpu_features/src/hwcaps.c', 'ifeq (,$(filter win32 darwin,$(PLATFORM_EXT)))\nSOURCES_C += \\\n\t$(EXTDIR)/cpu_features/src/hwcaps.c')
 assert s.count('filter win32 darwin') == 2
 open(p,'w').write(s)
+# collegamento: --gc-sections è del linker di Linux; su iOS come su macOS
+p='libretro/Makefile'; s=open(p).read()
+s=s.replace('else ifneq (,$(findstring osx,$(platform)))\n\tLD = $(CXX)', 'else ifneq (,$(findstring osx,$(platform))$(findstring ios,$(platform)))\n\tLD = $(CXX)\n\tLDFLAGS += -Wl,-dead_strip')
+assert '$(findstring ios,$(platform)))\n\tLD' in s
+open(p,'w').write(s)
 PY
