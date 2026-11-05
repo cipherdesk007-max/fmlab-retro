@@ -8,13 +8,15 @@ qui si compilano per iPhone gli emulatori che l'app porta con sé, e c'è lo stu
 > **Nessun gioco incluso.** FMLAB non fornisce e non scarica giochi: li mette l'utente, solo file che possiede o
 > homebrew liberi.
 
-Il Game Emulator di FMLAB Linux sull'iPhone 15 Pro Max: i dati del motore (versione 2026.11.05-1) arrivati da questo repository senza aggiornare l'app.
+Il Game Emulator di FMLAB Linux sull'iPhone 15 Pro Max: i dati del motore (versione 2026.11.05-2) arrivati da questo repository senza aggiornare l'app.
 
 <p align="center">
-  <img src="docs/images/giochi.png" width="24%" alt="Scheda Giochi (giochi sfocati)">
-  <img src="docs/images/gioco-ds-verticale.png" width="24%" alt="DS in verticale (gioco sfocato)">
-  <img src="docs/images/console.png" width="24%" alt="Console del Game Emulator">
-  <img src="docs/images/dati-del-motore.png" width="24%" alt="Dati del motore aggiornati da qui">
+  <img src="docs/images/ds-orizzontale.png" width="100%" alt="DS in orizzontale, schermo principale a tutta altezza (gioco sfocato)">
+</p>
+<p align="center">
+  <img src="docs/images/giochi.png" width="32%" alt="Scheda Giochi (giochi sfocati)">
+  <img src="docs/images/gioco-ds-verticale.png" width="32%" alt="DS in verticale (gioco sfocato)">
+  <img src="docs/images/dati-chiede.png" width="32%" alt="Dati del motore: l'app chiede prima di aggiornare">
 </p>
 
 ## Il disco emulatore

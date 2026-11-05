@@ -8,13 +8,15 @@ it builds the iPhone emulators the app ships with, plus the study that led to ma
 > **No games included.** FMLAB neither ships nor downloads games: users add their own, only files they own or free
 > homebrew.
 
-The FMLAB Linux Game Emulator on an iPhone 15 Pro Max: engine data (version 2026.11.05-1) arrived from this repository without updating the app.
+The FMLAB Linux Game Emulator on an iPhone 15 Pro Max: engine data (version 2026.11.05-2) arrived from this repository without updating the app.
 
 <p align="center">
-  <img src="docs/images/giochi.png" width="24%" alt="Games tab (games blurred)">
-  <img src="docs/images/gioco-ds-verticale.png" width="24%" alt="DS in portrait (game blurred)">
-  <img src="docs/images/console.png" width="24%" alt="Game Emulator consoles">
-  <img src="docs/images/dati-del-motore.png" width="24%" alt="Engine data updated from here">
+  <img src="docs/images/ds-orizzontale.png" width="100%" alt="DS in landscape, main screen full height (game blurred)">
+</p>
+<p align="center">
+  <img src="docs/images/giochi.png" width="32%" alt="Games tab (games blurred)">
+  <img src="docs/images/gioco-ds-verticale.png" width="32%" alt="DS in portrait (game blurred)">
+  <img src="docs/images/dati-chiede.png" width="32%" alt="Engine data: the app asks before updating">
 </p>
 
 ## The emulator disc
