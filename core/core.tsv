@@ -5,3 +5,4 @@ mgba	Game Boy Advance	mgba	7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6	cmake	-	-
 bsnes	Super Nintendo	bsnes	63ee22f7af8f5d1ada295c2c98fd7bf261fa62a7	.	Makefile	-
 pcsx_rearmed	PlayStation	pcsx_rearmed	7b0e8f8fadfbce3d170d195b9d9eecaabfa08c8e	.	Makefile.libretro	-
 desmume	Nintendo DS	desmume	95b4d798731caa809125b6c3c11d17cc332ff6ef	desmume/src/frontend/libretro	Makefile.libretro	-
+ppsspp	PSP	hrydgard/ppsspp	0051dca319947a593181aa68abc9b55629ec8913	libretro	Makefile	TARGET_ARCH=arm64

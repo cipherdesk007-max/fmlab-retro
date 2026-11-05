@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nome: [fceumm, gambatte, mgba, bsnes, pcsx_rearmed, desmume]
+        nome: [fceumm, gambatte, mgba, bsnes, pcsx_rearmed, desmume, ppsspp]
     steps:
       - uses: actions/checkout@v4
       - name: Strumenti

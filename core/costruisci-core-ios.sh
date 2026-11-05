@@ -9,7 +9,8 @@ riga=$(awk -F'\t' -v n="$nome" '$1==n' "$(dirname "$0")/core.tsv")
 IFS=$'\t' read -r _ console repo commit cartella makefile extra <<< "$riga"
 lavoro=$(mktemp -d)
 git -C "$lavoro" init -q src && cd "$lavoro/src"
-git remote add origin "https://github.com/libretro/$repo"
+case "$repo" in */*) url="https://github.com/$repo" ;; *) url="https://github.com/libretro/$repo" ;; esac
+git remote add origin "$url"
 git fetch -q --depth 1 origin "$commit" && git checkout -q FETCH_HEAD
 git submodule update -q --init --recursive --depth 1 || true
 export IOSSDK=$(xcrun --sdk iphoneos --show-sdk-path)
@@ -50,9 +51,17 @@ cat > "$fw/Info.plist" <<PL
 <key>MinimumOSVersion</key><string>$MIN</string>
 <key>FMLABCoreName</key><string>$nome</string>
 <key>FMLABCoreConsole</key><string>$console</string>
-<key>FMLABCoreSource</key><string>https://github.com/libretro/$repo/tree/$commit</string>
+<key>FMLABCoreSource</key><string>${url%.git}/tree/$commit</string>
 </dict></plist>
 PL
+# PSP: i file di sistema di PPSSPP (font del firmware, compat.ini...) vanno con il core; l'app li copia in BIOS/PPSSPP
+if [ "$nome" = ppsspp ]; then
+  mkdir -p "$fw/PPSSPP"
+  rsync -a --exclude shaders --exclude ui_images --exclude debugger --exclude '*.ttf' --exclude gamecontrollerdb.txt \
+    --exclude lang assets/ "$fw/PPSSPP/"
+  mkdir -p "$fw/PPSSPP/lang" && cp assets/lang/en_US.ini assets/lang/it_IT.ini "$fw/PPSSPP/lang/" 2>/dev/null || true
+  du -sh "$fw/PPSSPP"
+fi
 nm -gU "$fw/$bin" > "$lavoro/simboli.txt"
 grep -q ' _retro_run$' "$lavoro/simboli.txt" || { echo "manca retro_run"; exit 1; }
 lipo -archs "$fw/$bin"
