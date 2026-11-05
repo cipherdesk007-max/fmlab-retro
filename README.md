@@ -8,7 +8,7 @@ qui si compilano per iPhone gli emulatori che l'app porta con sé, e c'è lo stu
 > **Nessun gioco incluso.** FMLAB non fornisce e non scarica giochi: li mette l'utente, solo file che possiede o
 > homebrew liberi.
 
-Il Game Emulator di FMLAB Linux sull'iPhone 15 Pro Max: i dati del motore (versione 2026.11.04-2) arrivati da questo repository senza aggiornare l'app.
+Il Game Emulator di FMLAB Linux sull'iPhone 15 Pro Max: i dati del motore (versione 2026.11.05-1) arrivati da questo repository senza aggiornare l'app.
 
 <p align="center">
   <img src="docs/images/giochi.png" width="24%" alt="Scheda Giochi (giochi sfocati)">

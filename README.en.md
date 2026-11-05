@@ -8,7 +8,7 @@ it builds the iPhone emulators the app ships with, plus the study that led to ma
 > **No games included.** FMLAB neither ships nor downloads games: users add their own, only files they own or free
 > homebrew.
 
-The FMLAB Linux Game Emulator on an iPhone 15 Pro Max: engine data (version 2026.11.04-2) arrived from this repository without updating the app.
+The FMLAB Linux Game Emulator on an iPhone 15 Pro Max: engine data (version 2026.11.05-1) arrived from this repository without updating the app.
 
 <p align="center">
   <img src="docs/images/giochi.png" width="24%" alt="Games tab (games blurred)">
