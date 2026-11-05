@@ -35,8 +35,10 @@ without JIT.
 ## Engine data (updated without a new app)
 
 [`dati/emulatore.json`](dati/emulatore.json) holds everything that is **not code**: extensions each emulator opens,
-options (all JIT-free), BIOS files checked by MD5, notices. The Game Emulator downloads it from here (at most every 6
-hours, when opened), validates it and uses it; offline it uses the last copy or the one built into the app. Editing
+options (all JIT-free), BIOS files checked by MD5, notices. The Game Emulator checks it from here when you open the Games
+tab (at most every 2 minutes) and validates it, but **asks first**: *Update Now* or *Later*. Only a file with
+`"urgente": true` (a serious fix, e.g. an option that breaks a game) is applied straight away, with a notice. Offline
+it uses the last copy or the one built into the app. Editing
 this file updates every phone **without a new app version**. GitHub's checks reject a malformed file.
 
 Emulator code can't be updated this way: iOS only runs code signed with the app, so a new core ships with an FMLAB

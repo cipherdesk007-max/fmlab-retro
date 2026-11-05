@@ -47,8 +47,9 @@ scaricato dopo non partirebbe senza JIT.
 
 [`dati/emulatore.json`](dati/emulatore.json) contiene tutto quello che **non è codice**: estensioni riconosciute da
 ogni emulatore, opzioni (tutte senza JIT), BIOS controllati con l'impronta MD5, eventuali avvisi. Il Game Emulator lo
-scarica da qui (al massimo ogni 6 ore, quando lo apri), lo controlla e lo usa; se manca la rete usa l'ultima copia,
-o quella dentro l'app. Cambiare questo file aggiorna tutti i telefoni **senza una nuova versione dell'app**. Le prove
+controlla da qui quando apri la scheda Giochi (al massimo ogni 2 minuti) e lo verifica, ma **prima chiede**:
+*Aggiorna ora* o *Più tardi*. Solo se il file ha `"urgente": true` (una correzione grave, es. un'opzione che blocca
+un gioco) lo applica subito e lo dice. Se manca la rete usa l'ultima copia, o quella dentro l'app. Cambiare questo file aggiorna tutti i telefoni **senza una nuova versione dell'app**. Le prove
 di GitHub rifiutano un file scritto male.
 
 Il codice degli emulatori invece no: iOS esegue solo codice firmato insieme all'app, quindi un core nuovo arriva con

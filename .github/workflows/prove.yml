@@ -27,6 +27,7 @@ jobs:
               for campo in ("nome", "nota"):
                   assert campo not in c or (isinstance(c[campo], dict) and all(isinstance(v, str) for v in c[campo].values())), (n, campo)
           assert "novita" not in d or all(isinstance(v, str) for v in d["novita"].values()), "novita"
+          assert "urgente" not in d or isinstance(d["urgente"], bool), "urgente deve essere true/false"
           for b in d["bios"]:
               assert b["core"] in noti and re.fullmatch(r"[0-9a-f]{32}", b["md5"]) and "/" not in b["file"], b
           print("ok:", d["versione"], len(d["core"]), "core,", len(d["bios"]), "BIOS")
