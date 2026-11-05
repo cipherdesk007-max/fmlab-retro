@@ -31,7 +31,7 @@ else
     # nella Makefile di PPSSPP "ios-arm64" finisce nel ramo Linux arm64 (cerca "arm64" prima di "ios"):
     # si usa "ios" e si danno a mano i compilatori arm64 per iPhone
     piattaforma=ios
-    args+=("CC=clang -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN" "CXX=clang++ -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN")
+    args+=("CC=clang -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN" "CXX=clang++ -arch arm64 -isysroot $IOSSDK -miphoneos-version-min=$MIN" "MINVERSION=-miphoneos-version-min=$MIN")
   fi
   make -C "$cartella" -f "$makefile" platform=$piattaforma -j"$(sysctl -n hw.ncpu)" ${args[@]+"${args[@]}"} \
     IOSSDK="$IOSSDK" >"$lavoro/make.log" 2>&1 || { echo "--- primi comandi:"; grep -m 3 -E '^(clang|cc |c\+\+|xcrun)' "$lavoro/make.log" | cut -c1-2500; echo "---"; tail -60 "$lavoro/make.log"; exit 1; }
