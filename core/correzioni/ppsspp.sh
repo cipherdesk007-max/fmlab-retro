@@ -12,5 +12,8 @@ s=s.replace('else ifneq ($(PLATFORM_EXT), win32)\nCOREFLAGS += -DHAVE_STRONG_GET
 assert 'filter win32 darwin' in s
 s=s.replace('$(EXTDIR)/cpu_features/src/impl_aarch64_linux_or_android.c \\', '$(EXTDIR)/cpu_features/src/impl_aarch64_linux_or_android.c \\\n\t$(EXTDIR)/cpu_features/src/impl_aarch64_macos_or_iphone.c \\')
 assert 'impl_aarch64_macos_or_iphone' in s
+# hwcaps.c è solo per Linux/Android (getauxval)
+s=s.replace('ifneq ($(PLATFORM_EXT), win32)\nSOURCES_C += \\\n\t$(EXTDIR)/cpu_features/src/hwcaps.c', 'ifeq (,$(filter win32 darwin,$(PLATFORM_EXT)))\nSOURCES_C += \\\n\t$(EXTDIR)/cpu_features/src/hwcaps.c')
+assert s.count('filter win32 darwin') == 2
 open(p,'w').write(s)
 PY
