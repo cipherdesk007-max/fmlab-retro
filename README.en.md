@@ -22,7 +22,7 @@ The FMLAB Linux Game Emulator on an iPhone 15 Pro Max: engine data (version 2026
 ## The emulator disc
 
 **Native iPhone** emulators (arm64, iOS 15+, **no JIT**) from the official libretro cores, the same ones RetroArch uses:
-FCEUmm (NES), Gambatte (Game Boy/Color), mGBA (GBA), bsnes (SNES), PCSX ReARMed (PlayStation, interpreter), DeSmuME
+FCEUmm (NES), Gambatte (Game Boy/Color), mGBA (GBA), bsnes (SNES), PCSX ReARMed (PlayStation, interpreter), PPSSPP (PSP, IR interpreter and software rendering, with its system files; iPhone fixes in `core/correzioni/ppsspp.sh`), DeSmuME
 (DS, interpreter).
 
 1. [`core/core.tsv`](core/core.tsv) pins one commit per core.

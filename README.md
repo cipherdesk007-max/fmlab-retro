@@ -31,6 +31,7 @@ Emulatori **nativi per iPhone** (arm64, iOS 15+, **senza JIT**), dai core libret
 | Super Nintendo | bsnes | [libretro/bsnes](https://github.com/libretro/bsnes) |
 | PlayStation | PCSX ReARMed (interprete) | [libretro/pcsx_rearmed](https://github.com/libretro/pcsx_rearmed) |
 | Nintendo DS | DeSmuME (interprete) | [libretro/desmume](https://github.com/libretro/desmume) |
+| PSP | PPSSPP (interprete IR, grafica software; file di sistema inclusi) | [hrydgard/ppsspp](https://github.com/hrydgard/ppsspp) · correzioni per iPhone in [`core/correzioni/ppsspp.sh`](core/correzioni/ppsspp.sh) |
 
 Come funziona:
 
